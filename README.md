@@ -4,9 +4,8 @@
 
 ### RuntimeError: probability tensor contains either inf, nan or element < 0
 
-引用自：[https://github.com/THUDM/ChatGLM-6B/issues/31](https://github.com/THUDM/ChatGLM-6B/issues/31#issuecomment-1987262130)
-
 ```python
+# https://github.com/THUDM/ChatGLM-6B/issues/31#issuecomment-1987262130
 from transformers.generation.logits_process import LogitsProcessor, LogitsProcessorList, InfNanRemoveLogitsProcessor, MinLengthLogitsProcessor
 
 logits_processor = LogitsProcessorList()
@@ -29,6 +28,7 @@ model.generate(..,logits_processor=logits_processor,...)
 其它有可能的原因：
 （1）输入max length设置的太大了，模型接收了太多pad token；
 （2）max_grad_norm设置太大了；
+（3）需要先SFT再使用GRPO；
 
 ## Customized LoRA Bugs
 
