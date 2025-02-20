@@ -26,6 +26,9 @@ model.generate(..,logits_processor=logits_processor,...)
 
 目前发现可能是量化存在的问题，如果不量化或者8bit量化会在别的地方出现类似的bug，目前的做法是将reward手动设置为0，并取消量化，同时参考已有论文调整超参数保证输出质量，目前能正常训练，但依然存在reward为0（也就是输出为无意义的字符串）的情况。
 
+其它有可能的原因：
+（1）输入max length设置的太大了，模型接收了太多pad token；
+（2）max_grad_norm设置太大了；
 
 ## Customized LoRA Bugs
 
