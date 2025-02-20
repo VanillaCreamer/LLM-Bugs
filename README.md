@@ -4,6 +4,8 @@
 
 ### RuntimeError: probability tensor contains either inf, nan or element < 0
 
+[https://github.com/THUDM/ChatGLM-6B/issues/31](https://github.com/THUDM/ChatGLM-6B/issues/31#issuecomment-1987262130)
+
 ```python
 from transformers.generation.logits_process import LogitsProcessor, LogitsProcessorList, InfNanRemoveLogitsProcessor, MinLengthLogitsProcessor
 
