@@ -4,7 +4,7 @@
 
 ### RuntimeError: probability tensor contains either inf, nan or element < 0
 
-[https://github.com/THUDM/ChatGLM-6B/issues/31](https://github.com/THUDM/ChatGLM-6B/issues/31#issuecomment-1987262130)
+引用自：[https://github.com/THUDM/ChatGLM-6B/issues/31](https://github.com/THUDM/ChatGLM-6B/issues/31#issuecomment-1987262130)
 
 ```python
 from transformers.generation.logits_process import LogitsProcessor, LogitsProcessorList, InfNanRemoveLogitsProcessor, MinLengthLogitsProcessor
@@ -18,6 +18,11 @@ logits_processor.append(InfNanRemoveLogitsProcessor())
 model.generate(..,logits_processor=logits_processor,...)
 ```
 
+请注意这个方法不能根治出现nan的问题，只是把nan值换成了可处理的值，nan对模型训练产生的影响依然存在，继续训下去大概率会崩溃。
+
+经过排查后发现是模型输出了`"\n\n"`这样的字符串，导致计算reward时出现了nan值，进而导致训练出现崩溃，因此取消了上述processor，设置了min_new_tokens=20
+
+还是会出现同样的bug，debug后发现是某一条输出中出现了重复256次的`"\n\n\n...\n"`这样的值，导致reward函数计算结果中出现`nan`，可能需要加大repetition_penalty，或者将这样的输出的reward手动设置为0
 
 
 ## Customized LoRA Bugs
